@@ -299,9 +299,9 @@ namespace Lab6
     {
         static void Main(string[] args)
         {
-            /*FirstDimenshion.FirstTask();
+            FirstDimenshion.FirstTask();
             FirstDimenshion.SecondTask();
-            FirstDimenshion.ThirdTask();*/
+            FirstDimenshion.ThirdTask();
             SecondDimenshion.FirstTask();
             SecondDimenshion.SecondTask();
             SecondDimenshion.ThirdTask();
