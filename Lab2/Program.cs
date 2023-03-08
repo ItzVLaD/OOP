@@ -11,9 +11,13 @@ namespace Lab6
         {
             Console.Write("Enter a size of array: ");
             size = Convert.ToInt16(Console.ReadLine());
+            if (size == 0)
+                size = 2;
+            if (size < 0)
+                size = -size;
         }
 
-        private static void FillArrayRandomly(int[] arr, int min, int max)
+        private static void FillArrayRandomly(int[] arr, int min = 0, int max = 2)
         {
             for (int i = 0; i < arr.Length; i++)
             {
@@ -44,7 +48,7 @@ namespace Lab6
             int[]arr = new int[size];
             FillArrayRandomly(arr, -10, 11);
             PrintArray(arr, "Your array:");
-            int num = 0;
+            int num = -1;
             for (int i = 0; i < arr.Length; i++)
             {
                 if (arr[i] > 0)
@@ -54,11 +58,14 @@ namespace Lab6
                 }
             }
             int amount = 0;
-            for (int i = num; i < arr.Length; i++)
+            if (num != -1)
             {
-                if (arr[i] < 0)
+                for (int i = num; i < arr.Length; i++)
                 {
-                    amount++;
+                    if (arr[i] < 0)
+                    {
+                        amount++;
+                    }
                 }
             }
             Console.WriteLine("Amount of negative elements: " + amount);
@@ -87,7 +94,7 @@ namespace Lab6
         {
             SetSize();
             int[] arr = new int[size];
-            FillArrayRandomly(arr, -10, 11);
+            FillArrayRandomly(arr, -1, 2);
             PrintArray(arr, "Your array:");
             for(int i = arr.Length - 1; i >= 0; i--)
             {
@@ -110,9 +117,13 @@ namespace Lab6
         {
             Console.Write("Enter a size of array: ");
             size = Convert.ToInt16(Console.ReadLine());
+            if (size == 0)
+                size = 2;
+            if (size < 0)
+                size = -size;
         }
 
-        private static void FillArrayRandomly(int[,] arr, int min, int max)
+        private static void FillArrayRandomly(double[,] arr, int min, int max)
         {
             for (int i = 0; i < arr.GetLength(0); i++)
             {
@@ -123,7 +134,7 @@ namespace Lab6
             }
         }
 
-        private static void PrintArray(int[,] arr, string header)
+        private static void PrintArray(double[,] arr, string header)
         {
             Console.WriteLine(header);
             for (int i = 0; i < arr.GetLength(0); i++)
@@ -137,81 +148,100 @@ namespace Lab6
             Console.WriteLine("");
         }
 
-        private static void SwapElements(int[,] arr, int firstIndexX, int firstIndexY, int secondIndexX, int secondIndexY)
+        private static void SwapElements(double[,] arr, int firstIndexX, int firstIndexY, int secondIndexX, int secondIndexY)
         {
-            int temp = arr[firstIndexX, firstIndexY];
+            double temp = arr[firstIndexX, firstIndexY];
             arr[firstIndexX, firstIndexY] = arr[secondIndexX, secondIndexY];
             arr[secondIndexX, secondIndexY] = temp;
         }
 
-        private static void Smoothing(int[,] arr)
+        private static void Smoothing(double[,] arr, int round = 2)
         {
-            //Лівий верхній кут
-            arr[0, 0] = 
-                (arr[0, 1] + 
-                arr[1, 0] + arr[1, 1]) 
-                / 3;
-            //Верхній рядок
-            for (int j = 1; j < arr.GetLength(0) - 1; j++)
+            if (size > 1)
             {
-                arr[0, j] = 
-                    (arr[0, j - 1] + arr[0, j + 1] + 
-                    arr[1, j - 1] + arr[1, j] + arr[1, j + 1]) 
-                    / 5;
-            }
-            //Правий верхній кут
-            arr[0, arr.GetLength(1) - 1] = 
-                (arr[0, arr.GetLength(1) - 2] + 
-                arr[1, arr.GetLength(1) - 2] + arr[1, arr.GetLength(1) - 1]) 
-                / 3;
-            //Тіло масиву
-            for (int i = 0; i < arr.GetLength(0) - 2; i++)
-            {
-                //Перший елемент в рядку
-                arr[i + 1, 0] = 
-                    (arr[i, 0] + arr[i, 1] + 
-                    arr[i + 1, 1] + 
-                    arr[i + 2, 0] + arr[i + 2, 1])
-                    / 5;
-                //Інші елементи рядка
-                for (int j = 0; j < arr.GetLength(1) - 2; j++)
+                //Лівий верхній кут
+                arr[0, 0] =
+                    (arr[0, 1] +
+                    arr[1, 0] + arr[1, 1])
+                    / 3;
+                if (size > 2)
                 {
-                    arr[i + 1, j + 1] = 
-                        (arr[i, j] + arr[i, j + 1] + arr[i, j + 2] +
-                        arr[i + 1, j] + arr[i + 1, j + 2] +
-                        arr[i + 2, j] + arr[i + 2, j + 1] + arr[i + 2, j + 2]) / 8;
+                    //Верхній рядок
+                    for (int j = 1; j < arr.GetLength(0) - 1; j++)
+                    {
+                        arr[0, j] =
+                            (arr[0, j - 1] + arr[0, j + 1] +
+                            arr[1, j - 1] + arr[1, j] + arr[1, j + 1])
+                            / 5;
+                    }
                 }
-                //Останній елемент в рядку
-                arr[i + 1, arr.GetLength(1) - 1] =
-                    (arr[i, arr.GetLength(1) - 2] + arr[i, arr.GetLength(1) - 1] +
-                    arr[i + 1, arr.GetLength(1) - 2] +
-                    arr[i + 2, arr.GetLength(1) - 2] + arr[i + 2, arr.GetLength(1) - 1])
-                    / 5;
+                //Правий верхній кут
+                arr[0, arr.GetLength(1) - 1] =
+                    (arr[0, arr.GetLength(1) - 2] +
+                    arr[1, arr.GetLength(1) - 2] + arr[1, arr.GetLength(1) - 1])
+                    / 3;
+                if (size > 2)
+                {
+                    //Тіло масиву
+                    for (int i = 0; i < arr.GetLength(0) - 2; i++)
+                    {
+                        //Перший елемент в рядку
+                        arr[i + 1, 0] =
+                            (arr[i, 0] + arr[i, 1] +
+                            arr[i + 1, 1] +
+                            arr[i + 2, 0] + arr[i + 2, 1])
+                            / 5;
+                        //Інші елементи рядка
+                        for (int j = 0; j < arr.GetLength(1) - 2; j++)
+                        {
+                            arr[i + 1, j + 1] =
+                                (arr[i, j] + arr[i, j + 1] + arr[i, j + 2] +
+                                arr[i + 1, j] + arr[i + 1, j + 2] +
+                                arr[i + 2, j] + arr[i + 2, j + 1] + arr[i + 2, j + 2]) / 8;
+                        }
+                        //Останній елемент в рядку
+                        arr[i + 1, arr.GetLength(1) - 1] =
+                            (arr[i, arr.GetLength(1) - 2] + arr[i, arr.GetLength(1) - 1] +
+                            arr[i + 1, arr.GetLength(1) - 2] +
+                            arr[i + 2, arr.GetLength(1) - 2] + arr[i + 2, arr.GetLength(1) - 1])
+                            / 5;
+                    }
+                }
+                //Лівий нижній кут
+                arr[arr.GetLength(0) - 1, 0] =
+                    (arr[arr.GetLength(0) - 2, 0] + arr[arr.GetLength(0) - 2, 1] +
+                    arr[arr.GetLength(0) - 1, 1])
+                    / 3;
+                if (size > 2)
+                {
+                    //Нижній рядок
+                    for (int j = 1; j < arr.GetLength(0) - 1; j++)
+                    {
+                        arr[arr.GetLength(0) - 1, j] =
+                            (arr[arr.GetLength(0) - 2, j - 1] + arr[arr.GetLength(0) - 2, j] + arr[arr.GetLength(0) - 2, j + 1] +
+                            arr[arr.GetLength(0) - 1, j - 1] + arr[arr.GetLength(0) - 1, j + 1])
+                            / 5;
+                    }
+                }
+                //Правий нижній кут
+                arr[arr.GetLength(0) - 1, arr.GetLength(1) - 1] =
+                    (arr[arr.GetLength(0) - 2, arr.GetLength(1) - 2] + arr[arr.GetLength(0) - 2, arr.GetLength(1) - 1] +
+                    arr[arr.GetLength(0) - 1, arr.GetLength(1) - 2])
+                    / 3;
             }
-            //Лівий нижній кут
-            arr[arr.GetLength(0) - 1, 0] =
-                (arr[arr.GetLength(0) - 2, 0] + arr[arr.GetLength(0) - 2, 1] +
-                arr[arr.GetLength(0) - 1, 1])
-                / 3;
-            //Нижній рядок
-            for (int j = 1; j < arr.GetLength(0) - 1; j++)
+            for (int i = 0; i < arr.GetLength(0); i++)
             {
-                arr[arr.GetLength(0) - 1, j] =
-                    (arr[arr.GetLength(0) - 2, j - 1] + arr[arr.GetLength(0) - 2, j] + arr[arr.GetLength(0) - 2, j + 1] +
-                    arr[arr.GetLength(0) - 1, j - 1] + arr[arr.GetLength(0) - 1, j + 1])
-                    / 5;
+                for (int j = 0; j < arr.GetLength(1); j++)
+                {
+                    arr[i, j] = Math.Round(arr[i, j], round);
+                }
             }
-            //Правий нижній кут
-            arr[arr.GetLength(0) - 1, arr.GetLength(1) - 1] =
-                (arr[arr.GetLength(0) - 2, arr.GetLength(1) - 2] + arr[arr.GetLength(0) - 2, arr.GetLength(1) - 1] +
-                arr[arr.GetLength(0) - 1, arr.GetLength(1) - 2])
-                / 3;
         }
 
         public static void FirstTask()
         {
             SetSize();
-            int[,] arr = new int[size, size];
+            double[,] arr = new double[size, size];
             FillArrayRandomly(arr, -10, 11);
             PrintArray(arr, "Your array:");
             for (int i = 0; i < arr.GetLength(0) - 1; i++)
@@ -228,26 +258,36 @@ namespace Lab6
         }
         public static void SecondTask()
         {
-            SetSize();            
-            int[,] arr = new int[size, size];
+            SetSize();
+            double[,] arr = new double[size, size];
             FillArrayRandomly(arr, -10, 11);
             PrintArray(arr, "Your array:");
             Smoothing(arr);
-            PrintArray(arr, "Sorted:");
+            PrintArray(arr, "Smoothed:");
         }
         public static void ThirdTask()
         {
             SetSize();
-            int[,] arr = new int[size, size];
+            double[,] arr = new double[size, size];
             FillArrayRandomly(arr, -10, 11);
             PrintArray(arr, "Your array:");
             Smoothing(arr);
-            PrintArray(arr, "Sorted:");
-            int sum = 0;
-            for (int i = 0; i < arr.GetLength(0) - 1; i++)
+            PrintArray(arr, "Smoothed:");
+            double sum = 0;
+            /*for (int i = 0; i < arr.GetLength(0) - 1; i++)
             {
-                sum += arr[i + 1, i];
+                sum += Math.Abs(arr[i + 1, i]);
+            }*/
+            for (int i = 0; i < arr.GetLength(0); i++)
+            {
+                for (int j = 0; j < arr.GetLength(1); j++)
+                {
+                    if (i == j)
+                        break;
+                    sum += Math.Abs(arr[i, j]);
+                }
             }
+            sum = Math.Round(sum, 2);
             Console.WriteLine("Sum = " + sum);
         }
     }
@@ -259,9 +299,9 @@ namespace Lab6
     {
         static void Main(string[] args)
         {
-            FirstDimenshion.FirstTask();
+            /*FirstDimenshion.FirstTask();
             FirstDimenshion.SecondTask();
-            FirstDimenshion.ThirdTask();
+            FirstDimenshion.ThirdTask();*/
             SecondDimenshion.FirstTask();
             SecondDimenshion.SecondTask();
             SecondDimenshion.ThirdTask();
